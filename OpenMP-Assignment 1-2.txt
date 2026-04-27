@@ -1,0 +1,22 @@
+Lab Assignment -1 - 2
+GPU Computing (UCS635)
+Instructions: The instructor is required to discuss the following questions and
+implementation/Configurations with the students. Students are required to make note on these.
+1. To learn the advance computing environment of OpenMP and Learn to perform advance API
+OpenMP using OpenMP Library.
+2. What is the unit to measure computational power of a system? Calculate the computational
+power of the node given to you (or your Laptop).
+3. Write an OpenMP program such that, It should print the name of your family members, such
+that the names should come from different threads/cores. Also print the respective job id.
+4.Write an OpenMP program such that, It should print the sum of square of the thread id’s. Also
+make sure that, each thread should print the square value of their thread id.
+5. Consider a variable called “Aryabhatta” declared as 10 (i.e int Arbhatta=10).Write an OpenMP
+program which should print the result of multiplication of thread id and value of the above
+variable.
+Note*: The variable “Aryabhatta” should be declared as private.
+6. Write an OpenMP program that calculates the partial sum of the first 20 natural numbers using
+parallelism. Each thread should compute a portion of the sum by iterating through a loop.
+Implement the program using the lastprivate clause to ensure that the final total sum is correctly
+computed and printed outside the parallel region.
+
+

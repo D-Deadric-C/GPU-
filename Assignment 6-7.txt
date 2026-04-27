@@ -1,0 +1,110 @@
+Lab Assignment -6 - 7
+GPU Computing (UCS635)
+1. To learn the advance computing environment of CUDA.
+2. Learn to perform advance API CUDA using CUDA Library.
+3. To realization the matrix operations (Addition and Multiplication). Write parallel program and
+calculate CPU execution time by executing the programs on your own computer
+(Laptop/Desktop) and CoLab environment. (Use the same data file as used in Assignment (5)
+
+Output of the above programs:
+Matrix Addition Operation
+Hardware Type
+Input
+size
+Desktop/Laptop
+COLAB default Hardware
+COLAB GPU Hardware
+COLAB TPU Hardware
+Cloud Environment
+
+file Computational
+Time
+
+Matrix Multiplication Operation
+Desktop/Laptop
+COLAB default Hardware
+COLAB GPU Hardware
+COLAB TPU Hardware
+Cloud Environment
+4. To generate the random numbers by using different generator parameters in CURAND API and
+compare the execution time with a data file using different Hardware environment.
+
+Hardwae
+Desktop/Laptop
+COLAB default Hardware
+COLAB GPU Hardware
+COLAB TPU Hardware
+Cloud Environment
+
+Execution Time
+
+5. Write a CUDA program on matrix operations to calculate CPU execution time by increasing
+threads.
+Ref: CUDA Random Numbers
+
+Parallel programming is often used for simulation programs which need some element of
+randomness to work. Monte Carlo programs, which use randomness sampling, are also often
+written in a parallel manner.
+For this reason, being able to get random numbers in a parallel program is often important.
+The cuRAND library provides random numbers in CUDA programs.
+CUDA Random Example
+In order to use cuRAND, we need to add two include files into our program:
+#include <curand.h>
+#include <curand_kernel.h>
+cuRAND uses a curandState_t type to keep track of the state of the random sequence. The normal
+C rand function also has a state, but it is global, and hidden from the programmer. This
+makes rand not thread-safe, but easier to use.
+A curandState_t object must be initialized with a call to curand_init which has the following
+parameters:
+• seed
+The seed determines the beginning point of the sequence of random numbers.
+• sequence
+The sequence number is another seed-like value. It is used so that, if all cores have the same seed,
+but different sequence numbers, then they will get different random values.
+• offset
+The amount we skip ahead in the random sequence. This can be zero.
+• state
+A pointer to the curandState_t object to initialize.
+Once we have an initialized curandState_t object, we can get random numbers with
+the curand function which takes a pointer to a curandState_t object and returns to us a random
+unsigned integer.
+The following program uses these functions to generate random numbers:
+#include <unistd.h>
+#include <stdio.h>
+/* we need these includes for CUDA's random number stuff */
+#include <curand.h>
+#include <curand_kernel.h>
+#define MAX 100
+/* this GPU kernel function calculates a random number and stores it in the parameter */
+__global__ void random(int* result) {
+/* CUDA's random number library uses curandState_t to keep track of the seed value
+we will store a random state for every thread */
+curandState_t state;
+/* we have to initialize the state */
+curand_init(0, /* the seed controls the sequence of random values that are produced */
+
+0, /* the sequence number is only important with multiple cores */
+0, /* the offset is how much extra we advance in the sequence for each call, can be 0 */
+&state);
+/* curand works like rand - except that it takes a state as a parameter */
+*result = curand(&state) % MAX;
+}
+int main() {
+/* allocate an int on the GPU */
+int* gpu_x;
+cudaMalloc((void**) &gpu_x, sizeof(int));
+/* invoke the GPU to initialize all of the random states */
+random<<<1, 1>>>(gpu_x);
+/* copy the random number back */
+int x;
+cudaMemcpy(&x, gpu_x, sizeof(int), cudaMemcpyDeviceToHost);
+printf("Random number = %d.\n", x);
+/* free the memory we allocated */
+cudaFree(gpu_x);
+return 0;
+}
+https://docs.nvidia.com/cuda/curand/device-api-overview.html
+https://cseweb.ucsd.edu/classes/wi15/cse262-a/static/cuda-5.5-doc/pdf/CURAND_Library.pdf
+https://hemprasad.wordpress.com/2015/10/03/cuda-random-numbers/
+
+

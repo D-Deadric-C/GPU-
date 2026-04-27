@@ -1,0 +1,212 @@
+Consider a scenario where you have to parallelize a program that performs matrix multiplication using
+OpenMP. Your task is to implement parallelization using both static and dynamic scheduling, and
+compare the execution time of each approach.
+•
+•
+•
+•
+•
+
+Implement a serial version of matrix multiplication in C/C++.
+Parallelize the matrix multiplication using OpenMP with static scheduling.
+Parallelize the matrix multiplication using OpenMP with dynamic scheduling.
+Measure the execution time of each parallelized version for various matrix sizes.
+Compare the execution times and discuss the advantages and disadvantages of static and
+dynamic scheduling in this context.
+Solution:
+(i)
+
+Static Scheduling:
+
+#include<stdlib.h>
+#define CHUNKSIZE 1
+#define N 4
+int main(int argc, char *argv[])
+{
+int nthreads, tid,chunk;
+int a[3][3] = { { 1, 2, 3 },
+{ 5, 6, 7 },
+{ 9, 10, 11 } };
+int b[3][3] = { { 1, 2, 3 },
+{ 5, 6, 7 },
+{ 9, 10, 11 } };
+int mul[3][3],i,j,k;
+chunk=CHUNKSIZE;
+#pragma omp parallel private(i,tid)
+{
+tid = omp_get_thread_num();
+if (tid == 0)
+{
+nthreads = omp_get_num_threads();
+printf("Number of threads= %d\n", nthreads);
+}
+printf("Thread %d starting....\n",tid);
+#pragma omp for schedule(static, chunk)
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+mul[i][j]=0;
+for(k=0;k<3;k++)
+{
+mul[i][j]+=a[i][k]*b[k][j];
+}
+}
+}
+//for printing result
+for(i=0;i<3;i++)
+{
+
+for(j=0;j<3;j++)
+{
+printf("Thread %d: c[%d][%d]=%d\t",tid,i,j,mul[i][j]);
+}
+printf("\n"); } }
+(ii)
+
+Dynamic Scheduling:
+
+#include<stdlib.h>
+#define CHUNKSIZE 1
+#define N 4
+int main(int argc, char *argv[])
+{
+int nthreads, tid,chunk;
+int a[3][3] = { { 1, 2, 3 },
+{ 5, 6, 7 },
+{ 9, 10, 11 } };
+int b[3][3] = { { 1, 2, 3 },
+{ 5, 6, 7 },
+{ 9, 10, 11 } };
+int mul[3][3],i,j,k;
+chunk=CHUNKSIZE;
+#pragma omp parallel private(i,tid)
+{
+tid = omp_get_thread_num();
+if (tid == 0)
+{
+nthreads = omp_get_num_threads();
+printf("Number of threads= %d\n", nthreads);
+}
+printf("Thread %d starting....\n",tid);
+#pragma omp for schedule(dynamic, chunk)
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+mul[i][j]=0;
+for(k=0;k<3;k++)
+{
+mul[i][j]+=a[i][k]*b[k][j];
+}}}
+//for printing result
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+{
+printf("Thread %d: c[%d][%d]=%d\t",tid,i,j,mul[i][j]);
+}
+printf("\n"); } }
+
+Write a Parallel C program which should print the series of 2 and 4. Make sure both should be
+executed by different threads.
+Solution:
+#include <stdio.h>
+#include <omp.h>
+#define N 10
+int main() {
+int i, a[N], b[N];
+#pragma omp parallel sections private(i)
+{
+#pragma omp section
+{
+for (i=1 ; i<=N ; i++){
+a[i] = i*2;
+printf("Thread %d : %d \n",omp_get_thread_num(), a[i]);
+}
+}
+#pragma omp section
+{
+for (i=1 ; i<=N ; i++) {
+b[i] = i*4;
+printf("Thread %d : %d \n",omp_get_thread_num(), b[i]);
+}}}}
+Consider a scenario where you have a shared variable total_sum that needs to be updated concurrently
+by multiple threads in a parallel program. However, concurrent updates to this variable can result in
+data races and incorrect results. Your task is to modify the program to ensure correct synchronization
+using OpenMP's critical and atomic constructs.
+•
+
+Implement a simple parallel program in C that initializes an array of integers and calculates
+the sum of its elements concurrently using OpenMP.
+• Identify potential issues with concurrent updates to the total_sum variable in the parallelized
+version of the program.
+• Modify the program to use OpenMP's critical/atomic directive to ensure synchronized access
+to the total_sum variable.
+• Measure and compare the performance of synchronized versions against the unsynchronized
+implementation.
+Solution:
+#include <stdio.h>
+#include <omp.h>
+#define ARRAY_SIZE 10
+int main() {
+const int num_threads = 4;
+int array[ARRAY_SIZE];
+int total_sum = 0;
+//Initialize the array with values
+for (int i = 0; i < ARRAY_SIZE; ++i) {
+array[i] = i + 1;
+}
+
+#pragma omp parallel num_threads(num_threads) shared(total_sum)
+{
+double local_sum = 0;
+#pragma omp for
+for (int i = 0; i < ARRAY_SIZE; ++i) {
+local_sum += array[i];
+}
+#pragma omp critical
+{
+total_sum += local_sum;
+}
+}
+printf("Total sum: %d\n", total_sum);
+return 0;
+Consider a scenario where you have a large array of integers, and you need to find the sum of all its
+elements in parallel using OpenMP. The array is shared among multiple threads, and parallelism is
+needed to expedite the computation process. Your task is to write a parallel program that calculates
+the sum of all elements in the array using OpenMP's reduction clause.
+•
+
+Implement a sequential version of the program that calculates the sum of all elements in the
+array without using any parallelism.
+• Identify potential bottlenecks and limitations of the sequential implementation in handling
+large arrays efficiently.
+• Modify the program to utilize OpenMP's reduction clause to parallelize the summation
+process across multiple threads.
+• Test the program with different array sizes and thread counts to evaluate its scalability and
+performance.
+• Discuss the advantages of using the reduction clause for parallel summation and its impact on
+program efficiency.
+Solution:
+#include <stdio.h>
+#include <omp.h>
+#define N 100
+int main()
+{
+int i;
+double s = 0.0, array[N];
+//Initialize the array with values
+for ( i = 0; i < N; ++i) {
+array[i] = i + 1.0;
+}
+#pragma omp parallel for reduction(+:s)
+for (i = 0; i < N; ++i)
+{
+
+s+=array[i];
+}
+printf("Total sum: %f\n", s);
+return 0; }
+
+

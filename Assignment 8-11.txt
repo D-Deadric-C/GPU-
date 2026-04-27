@@ -1,0 +1,28 @@
+Lab Assignment – 8- 11
+GPU Computing (UCS635)
+Instructions: The instructor is required to discuss the following questions and
+implementation/Configurations with the students. Students are required to make note on
+these.
+Q1. Write a CUDA program matrix multiplication using shared memory tiling on data file
+generated using CURAND API. Also apply GPU’s the error handling and timing measuring
+mechanisms.
+Q2. Write a CUDA program for thread coarsening for tiled matrix multiplication on any data file
+from any data source. Also apply GPU’s the error handling and timing measuring
+mechanisms.
+Q3. Write a CUDA program for Tiled matrix multiplication kernel with boundary condition checks
+on any data file from any data source. Also apply GPU’s the error handling and timing
+measuring mechanisms.
+Q4. Write a CUDA program for parallel sum reduction kernel using shared memory tiling on any
+data file from any data source. Also apply GPU’s the error handling and timing measuring
+mechanisms.
+Q5. Write a CUDA program for Bubble Sort algorithm using shared memory tiling on data file
+generated using CURAND API. Also apply GPU’s the error handling and timing measuring
+mechanisms.
+Q6. Write a CUDA program for Even-odd sort on data file generated using CURAND API. Also
+apply GPU’s the error handling and timing measuring mechanisms.
+Q7. Write a CUDA program for implementing 1D convolution kernel algorithm with boundary
+condition handling.
+Q8 Write a CUDA program for 2D convolution kernel by assume a matrix and vector array as a
+convolution mask by using constant memory concept of CUDA environment.
+
+

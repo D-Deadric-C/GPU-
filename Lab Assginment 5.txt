@@ -1,0 +1,32 @@
+Lab Assignment - 5
+GPU Computing (UCS635)
+Instructions: The instructor is required to discuss the following questions and
+implementation/Configurations with the students. Students are required to make note on these.
+1. Generate random numbers using different random number generator parameters and store them
+in a file to be used as a dataset. Execute the program on a local computer (laptop/desktop) and
+on the Google Colab environment, and calculate the CPU execution time for both cases.
+
+Output of the above programs:
+Hardware Type
+
+Input
+file Computational
+size/Matrix
+Time/CPU
+Size
+execution Time
+
+local computer
+(laptop/desktop)
+Google Colab environment
+Cloud Environment
+2. To learn the computing environment of CUDA. Install/configure CUDA environment latest
+version on Colab using Python, Numba, CUPY compiling environments.
+3. To learn and implement advanced CUDA API programming using the CUDA library, including
+querying and analyzing GPU device properties.
+References:
+1. CUDA by Example: An Introduction to General-Purpose GPU Programming
+Book by Edward Kandrot
+2. https://nyu-cds.github.io/python-numba/
+
+
